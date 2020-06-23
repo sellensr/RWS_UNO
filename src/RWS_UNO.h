@@ -70,6 +70,8 @@
   A4 ///< Connect Thermistor to A4/A5, resistor from A4 to Vcc
 #define THERMISTOR_LOW_PIN A5 ///< Pull to ground for thermistor
 #ifdef A7
+#define MULTI_PIN     A4  ///< Pins to use for multimeter
+#define MULTI_LOW_PIN A5
 #define BAT_PIN A7       ///< Battery monitoring for feathers
 #endif
 #define BAT_FACTOR 2.00  ///< voltage divider step down
