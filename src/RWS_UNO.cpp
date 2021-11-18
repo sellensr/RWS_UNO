@@ -51,22 +51,6 @@ void RWS_UNO::begin(unsigned long spd, time_t tUTC, double tzHours,
   while(!Serial && millis() < 5000);    // wait a while, not forever
   Wire.begin();                         // start i2c
   setTimeRWS(tUTC, tzHours, tSource, tAccuracy);
-//  setTime(0);       // initialize the time library TimeLib used by NTP functions
-//  // set the internal time to UTC
-//  if(tUTC == 0){
-//    // Use compile time as the default time -- it will lag a few seconds.
-//    // Note that this will be local time, not UTC, so don't add a time zone.
-//    DateTime dtCompile = DateTime(F(__DATE__), F(__TIME__));
-//    tUTC = dtCompile.unixtime();
-//    setTimeZone(0);    // compile time is local already
-//    timeSource = TIME_SOURCE_COMPILER;
-//    timeAccuracy = 0.0;
-//  } else {
-//    timeSource = tSource;
-//    timeAccuracy = tAccuracy;
-//  }
-//  setTime(hour(tUTC),minute(tUTC),second(tUTC),day(tUTC),month(tUTC),year(tUTC));
-//  setTimeZone(tzHours);
   #if(ADC_RESOLUTION > 10)              // set resolution for non-328 boards
   analogReadResolution(ADC_RESOLUTION);
   #endif
@@ -103,10 +87,6 @@ void RWS_UNO::setTimeRWS(time_t tUTC, double tzHours,
   }
   setTime(hour(tUTC),minute(tUTC),second(tUTC),day(tUTC),month(tUTC),year(tUTC));
   setTimeZone(tzHours);
-  #if(ADC_RESOLUTION > 10)              // set resolution for non-328 boards
-  analogReadResolution(ADC_RESOLUTION);
-  #endif
-  _analogMax = pow(2, ADC_RESOLUTION) - 1; // set max ADC value for all boards
 }
 
 /**************************************************************************/
@@ -126,25 +106,25 @@ int RWS_UNO::run(bool reset){
   }
   if(timeLast != 0) 
     _dt = timeNow - timeLast;
-  if(_dtAvg > 0.001 & _dt > 0.001) 
-    _dtAvg = 0.999 * _dtAvg + 0.001 * _dt;
+  if(_dtAvg > 0.001 && _dt > 0.001) 
+    _dtAvg = 0.999 * _dtAvg + 0.001 * _dt;  // smooth 
   else 
-    _dtAvg = _dt;
+    _dtAvg = _dt;   // start with first loop time
   _dtMax = max(_dtMax,_dt);
-  timeLast = timeNow;
+  timeLast = timeNow; // remember the old time
   return 0;
   }
 /**************************************************************************/
 /*!
     @brief Tracking behaviour of the sketch - timing
-    @return time between last two run() calls.
+    @return time [us] between last two run() calls.
 */
 double RWS_UNO::dt(){
   return _dt;
 }
 /*!
     @brief Tracking behaviour of the sketch - timing
-    @return average time between two run() calls since last reset.
+    @return average time [us] between two run() calls since last reset.
 */
 double RWS_UNO::dtAvg(){
   return _dtAvg;
@@ -256,6 +236,7 @@ double RWS_UNO::setVRef(
   _vRef = v;    // use the supplied value, probably _vReg for default
   return getVRef();
 }
+
 /**************************************************************************/
 /*!
     @brief Request the current reference voltage value. Note that it cannot

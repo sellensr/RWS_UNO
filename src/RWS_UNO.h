@@ -59,22 +59,19 @@
   12 ///< Hard Wired, pulled low when pressed, good choice because 12 doesn't do
      ///< PWM on ItsyBitsy M0
 #define LED_PIN 13 ///< On Feather Board, and just about all others
-#define TMP36_PIN                                                              \
-  A0 ///< Hard Wired if included, but TMP36 is being phased out of MECH 217
-#define POT_LOW_PIN A0  ///< Plug pot directly to A0-A2 for calibration testing
+#define POT_LOW_PIN A2  ///< Plug pot directly to A0-A2 for calibration testing
 #define POT_PIN A1      ///< Hard Wired to middle pin of pot
-#define POT_HIGH_PIN A2 ///< The third pin of a direct plugged pot
-#define AMP_PIN A2 ///< Hard Wired if included, connect amplifier output here
+#define POT_HIGH_PIN A0 ///< The third pin of a direct plugged pot
+#define AMP_PIN A3 ///< Hard Wired if included, connect amplifier output here
 #define CDS_PIN                                                                \
-  A3 ///< Hard Wired if included, good place for permanently mounted photocell
+  A4 ///< Hard Wired if included, good place for permanently mounted photocell
      ///< input
 #define THERMISTOR_PIN                                                         \
-  A4 ///< Connect Thermistor to A4/A5, resistor from A4 to Vcc
-#define THERMISTOR_LOW_PIN A5 ///< Pull to ground for thermistor
+  A5 ///< Connect Thermistor to GND/A5, resistor from A5 to Vcc
 #ifdef A7
-#define MULTI_PIN     A4  ///< Pins to use for multimeter
-#define MULTI_LOW_PIN A5
-#define BAT_PIN A7       ///< Battery monitoring for feathers
+  #define MULTI_PIN     A4  ///< Pins to use for multimeter
+  #define MULTI_LOW_PIN A5
+  #define BAT_PIN A7       ///< Battery monitoring for feathers
 #endif
 #define BAT_FACTOR 2.00  ///< voltage divider step down
 #define KC_OFFSET 273.15 ///< K for 0 deg C conversion factor
