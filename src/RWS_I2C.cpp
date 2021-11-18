@@ -186,7 +186,13 @@ void RWS_UNO::i2cScan() {
         Serial.print("Could be an LSM303 Accelerometer / Magnetometer\n");
       if (address >= 0x6A && address <= 0x6B)
         Serial.print("Could be an L3GD20H Gyro\n");
-
+      if (address >= 0x40 && address <= 0x41)
+        Serial.print("Could be an HTU31D Humidity / Temperature Sensor\n");
+      if (address >= 0x4C && address <= 0x4C)
+        Serial.print("Could be an Adafruit EMC2101 Fan Control Breakout\n");
+      if (address >= 0x0C && address <= 0x0C)
+        Serial.print("This is the SMBus Alert Response Address (0x0C), which is a kind of broadcast address\n");
+        
       nDevices++;
       Serial.print("\n");
     }

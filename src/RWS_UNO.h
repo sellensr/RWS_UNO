@@ -50,6 +50,8 @@
 #define LIS3DH_ADDRESS_A          0x18
 #define LIS3DH_ADDRESS_B          0x19
 #define LIS3DH_REG_WHOAMI         0x0F
+#define HTU31D_ADDRESS_A          0x40
+#define HTU31D_ADDRESS_B          0x41
 
 // RWS Standard Pin Assignments for consistency across projects
 #define HALL_PIN 11 ///< Hall Effect Sensor goes low when magnet present
