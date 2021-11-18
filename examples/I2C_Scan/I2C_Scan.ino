@@ -7,6 +7,7 @@ void setup()
   rws.begin(115200);
 
   Serial.print("\n\nRWS UNO I2C Scan\n\n");
+  Serial.print("Results may be unpredictable if there are no I2C devices connected.\n\n");
 }
 
  
