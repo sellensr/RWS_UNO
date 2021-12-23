@@ -195,6 +195,7 @@ void RWS_UNO::i2cScan() {
         
       nDevices++;
       Serial.print("\n");
+      delay(100); // for the monitor to catch up
     }
   }
   if (nDevices == 0)

@@ -36,6 +36,7 @@ void loop()
   uno.stampNow(&timeStamp);
   Serial.print("\n"); Serial.println(timeStamp);
   Serial.print((unsigned long) now());
+  Serial.print(" seconds returned by now()\n");
 
   Serial.print("          Analog on A0: ");
   PL(analogRead(A0));
