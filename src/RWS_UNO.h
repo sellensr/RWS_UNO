@@ -68,11 +68,13 @@
      ///< input
 #define THERMISTOR_PIN                                                         \
   A5 ///< Connect Thermistor to GND/A5, resistor from A5 to Vcc
-#ifdef A7
+//#ifdef A7
+  // A7 seems to exist for all boards now (2022) possibly somewhere 
+  // so deep that it doesn't show as a #defined term, so the test fails on M0...
   #define MULTI_PIN     A4  ///< Pins to use for multimeter
   #define MULTI_LOW_PIN A5
   #define BAT_PIN A7       ///< Battery monitoring for feathers
-#endif
+//#endif
 #define BAT_FACTOR 2.00  ///< voltage divider step down
 #define KC_OFFSET 273.15 ///< K for 0 deg C conversion factor
 

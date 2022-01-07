@@ -4,7 +4,7 @@
  *   
  ********************************************************************/
 #include "RWS_UNO.h"
-#define VREF 3.28 // voltage measured from the board with a multimeter
+#define VREF 3.29 // voltage measured from the board with a multimeter
 
 RWS_UNO uno = RWS_UNO();
 unsigned b[5000];
@@ -21,12 +21,16 @@ void setup()
 
   uno.setVReg(VREF);
   uno.setVRef(2.2);
+  uno.setVRef(VREF);
   Serial.print("Voltages for Regulator: ");
   PL(uno.getVReg(), 3);
   Serial.print("         ADC Reference: ");
   PL(uno.getVRef(), 3);
   Serial.print("               Battery: ");
   PL(uno.getVBat(), 3);
+  Serial.print("               Battery: ");
+  Serial.print(uno.getBat());
+  PL("%");
 
 }
 
@@ -42,6 +46,11 @@ void loop()
   PL(analogRead(A0));
   Serial.print("         Voltage on A0: ");
   PL(uno.getV(A0), 3);
+  Serial.print("               Battery: ");
+  PL(uno.getVBat(), 3);
+  Serial.print("               Battery: ");
+  Serial.print(uno.getBat());
+  PL("%");
 
   uno.run();
   uint32_t timeNow = micros();
