@@ -79,6 +79,7 @@
 #define KC_OFFSET 273.15 ///< K for 0 deg C conversion factor
 
 //#ifndef ADC_RESOLUTION  ///< Override any version coming from the processor definitions 
+  #undef ADC_RESOLUTION
   #ifdef ARDUINO_ARCH_AVR
     #define ADC_RESOLUTION    10 ///< Use 10 because it must be an UNO or similar
   #else
