@@ -78,17 +78,17 @@
 #define BAT_FACTOR 2.00  ///< voltage divider step down
 #define KC_OFFSET 273.15 ///< K for 0 deg C conversion factor
 
-#ifndef ADC_RESOLUTION
+//#ifndef ADC_RESOLUTION  ///< Override any version coming from the processor definitions 
   #ifdef ARDUINO_ARCH_AVR
-    #define ADC_RESOLUTION 10 ///< Use 10 because it must be an UNO or similar
+    #define ADC_RESOLUTION    10 ///< Use 10 because it must be an UNO or similar
   #else
     #ifdef ARDUINO_ARCH_ESP8266
-      #define ADC_RESOLUTION 10
+      #define ADC_RESOLUTION  10
     #else
-      #define ADC_RESOLUTION 16 ///< Will work even if actual is 12
+      #define ADC_RESOLUTION  16 ///< Will work even if actual is 12
     #endif
   #endif
-#endif
+//#endif
 
 typedef enum {
   TIME_SOURCE_NONE,       ///< Time has not been set, or setter unknown

@@ -51,6 +51,7 @@ void loop()
   Serial.print("               Battery: ");
   Serial.print(uno.getBat());
   PL("%");
+  Serial.print(ADC_RESOLUTION); PL(" bit ADC Resolution");
 
   uno.run();
   uint32_t timeNow = micros();
