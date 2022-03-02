@@ -13,7 +13,7 @@ void setup()
 {
   
   unsigned c[5000];
-  uno.begin(0, 0, -5);
+  uno.begin();
   Serial.print("\n\nRWS Arduino Extensions Testing\n\n");
   Serial.print(uno.bytesFree()); Serial.print(" bytes free in memory, approx.\n\n");
 //  Serial.print(uno.setTimeZone(-5)); Serial.print(" is being set as the time zone\n");
@@ -36,11 +36,6 @@ void setup()
 
 void loop()
 {
-  String timeStamp = "";
-  uno.stampNow(&timeStamp);
-  Serial.print("\n"); Serial.println(timeStamp);
-  Serial.print((unsigned long) now());
-  Serial.print(" seconds returned by now()\n");
 
   Serial.print("          Analog on A0: ");
   PL(analogRead(A0));
@@ -53,7 +48,6 @@ void loop()
   PL("%");
   Serial.print(ADC_RESOLUTION); PL(" bit ADC Resolution");
 
-  uno.run();
   uint32_t timeNow = micros();
   // take care of business
 

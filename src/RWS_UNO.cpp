@@ -41,8 +41,7 @@ RWS_UNO::~RWS_UNO() {}
 //void RWS_UNO::begin(unsigned long spd){
 //  return begin(spd,0,0);
 //}
-void RWS_UNO::begin(unsigned long spd, time_t tUTC, double tzHours,
-                    rws_uno_time_source_t tSource, double tAccuracy){
+void RWS_UNO::begin(unsigned long spd){
   baud = spd;                           // set the serial port speed
   if (spd == 0) baud = 115200;          // default to 115200
   baud = max(300UL,baud);               // limits from IDE 1.8.9 monitor
@@ -50,92 +49,12 @@ void RWS_UNO::begin(unsigned long spd, time_t tUTC, double tzHours,
   Serial.begin(baud);
   while(!Serial && millis() < 5000);    // wait a while, not forever
   Wire.begin();                         // start i2c
-  setTimeRWS(tUTC, tzHours, tSource, tAccuracy);
   #if(ADC_RESOLUTION > 10)              // set resolution for non-328 boards
   analogReadResolution(ADC_RESOLUTION);
   #endif
   _analogMax = pow(2, ADC_RESOLUTION) - 1; // set max ADC value for all boards
 }
 
-/**************************************************************************/
-/*!
-    @brief Set the time for RWS Extensions. The source and accuracy values
-    for RWS_UNO will only be correct if this function is used as the only
-    call to setTime.
-    @param tUTC Current time UTC, unix time in seconds.
-    @param tzHours Local time zone in hours difference from UTC.
-    @param tSource the source of the time information
-    @param tAccuracy the accuracy of the time information in seconds,
-    0.0 for unknown
-    @return none
-*/
-/**************************************************************************/
-void RWS_UNO::setTimeRWS(time_t tUTC, double tzHours,
-                         rws_uno_time_source_t tSource, double tAccuracy){
-  setTime(0);       // initialize the time library TimeLib used by NTP functions
-  // set the internal time to UTC
-  if(tUTC == 0){
-    // Use compile time as the default time -- it will lag a few seconds.
-    // Note that this will be local time, not UTC, so subtract and then add a time zone.
-    DateTime dtCompile = DateTime(F(__DATE__), F(__TIME__));
-    tUTC = dtCompile.unixtime() - 3600 * tzHours;
-    timeSource = TIME_SOURCE_COMPILER;
-    timeAccuracy = 0.0;
-  } else {
-    timeSource = tSource;
-    timeAccuracy = tAccuracy;
-  }
-  setTime(hour(tUTC),minute(tUTC),second(tUTC),day(tUTC),month(tUTC),year(tUTC));
-  setTimeZone(tzHours);
-}
-
-/**************************************************************************/
-/*!
-    @brief Tracking behaviour of the sketch. Call run() at the top of the loop.
-    @param reset Set all the stats back to 0 if true
-    @return integer status code
-*/
-/**************************************************************************/
-int RWS_UNO::run(bool reset){
-  static unsigned long timeLast = 0;
-  unsigned long timeNow = micros();
-  if(reset){
-    _dt = 0.0;             // most recent time between calls [us]
-    _dtAvg = 0.0;          // average time between calls [us]
-    _dtMax = 0.0;          // largest time between calls [us]
-  }
-  if(timeLast != 0) 
-    _dt = timeNow - timeLast;
-  if(_dtAvg > 0.001 && _dt > 0.001) 
-    _dtAvg = 0.999 * _dtAvg + 0.001 * _dt;  // smooth 
-  else 
-    _dtAvg = _dt;   // start with first loop time
-  _dtMax = max(_dtMax,_dt);
-  timeLast = timeNow; // remember the old time
-  return 0;
-  }
-/**************************************************************************/
-/*!
-    @brief Tracking behaviour of the sketch - timing
-    @return time [us] between last two run() calls.
-*/
-double RWS_UNO::dt(){
-  return _dt;
-}
-/*!
-    @brief Tracking behaviour of the sketch - timing
-    @return average time [us] between two run() calls since last reset.
-*/
-double RWS_UNO::dtAvg(){
-  return _dtAvg;
-}
-/*!
-    @brief Tracking behaviour of the sketch - timing
-    @return maximum time between two run() calls since last reset.
-*/
-double RWS_UNO::dtMax(){
-  return _dtMax;
-}
 
 /**************************************************************************/
 /*!
